@@ -1,9 +1,15 @@
-import { Schema, model } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
 import { IUser } from './users.interface'
 import { USER_ROLES, USER_STATUS } from './users.constant'
-import { hashPassword } from '@/utils/bcrypt'
+import { comparePasswords, hashPassword } from '@/utils/bcrypt'
 
-const userSchema = new Schema<IUser>(
+export interface IUserMethods {
+    isPasswordMatched(password: string): Promise<boolean>
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>
+
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     {
         username: {
             type: String,
@@ -48,4 +54,8 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-export const User = model<IUser>('User', userSchema)
+userSchema.methods.isPasswordMatched = async function (password: string) {
+    return await comparePasswords(password, this.password)
+}
+
+export const User = model<IUser, UserModel>('User', userSchema)
