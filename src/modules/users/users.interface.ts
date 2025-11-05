@@ -1,7 +1,7 @@
 import { Document } from 'mongoose'
 import { UserRole, UserStatus } from './users.constant'
 
-export interface IUser extends Document {
+export interface IUser {
     username: string
     email: string
     password: string

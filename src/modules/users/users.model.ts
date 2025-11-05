@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import { IUser } from './users.interface'
 import { USER_ROLES, USER_STATUS } from './users.constant'
+import { hashPassword } from '@/utils/bcrypt'
 
 const userSchema = new Schema<IUser>(
     {
@@ -20,6 +21,7 @@ const userSchema = new Schema<IUser>(
         password: {
             type: String,
             required: [true, 'Password is required'],
+            minlength: [6, 'Password must be at least 6 characters long'],
             select: false,
         },
         avatar: {
@@ -40,5 +42,10 @@ const userSchema = new Schema<IUser>(
         timestamps: true,
     }
 )
+
+userSchema.pre('save', async function (next) {
+    this.password = await hashPassword(this.password)
+    next()
+})
 
 export const User = model<IUser>('User', userSchema)
