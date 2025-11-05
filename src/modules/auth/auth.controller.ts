@@ -2,7 +2,7 @@ import { catchAsync } from '@/middlewares'
 import { RequestHandler } from 'express'
 import authService from './auth.service'
 import AppError from '@/utils/AppError'
-import { decodeJwt, generateJwt } from '@/utils/jwt'
+import { decodeJwt, generateJwt, verifyJwt } from '@/utils/jwt'
 import { env } from '@/config/env'
 
 export const signupWithEmail: RequestHandler = catchAsync(async (req, res) => {
@@ -65,3 +65,24 @@ export const signinWithEmail: RequestHandler = catchAsync(
         })
     }
 )
+
+export const protect = catchAsync(async (req, __, next) => {
+    const token =
+        req.headers.authorization &&
+        req.headers.authorization.startsWith('Bearer ')
+            ? req.headers.authorization.split(' ')[1]
+            : undefined
+
+    if (!token) {
+        return next(new AppError('You are not logged in!', 401))
+    }
+    const decoded = await verifyJwt(token, env.ACCESS_TOKEN_SECRET)
+
+    const user = await authService.getUserById(decoded.id)
+
+    if (!user) {
+        return next(new AppError('No user exists with this token!', 401))
+    }
+    ;(req as any).user = user
+    next()
+})

@@ -12,8 +12,13 @@ const getUserByEmail = (email: string, withPassword = false) => {
     return User.findOne({ email })
 }
 
+const getUserById = (id: string) => {
+    return User.findById(id)
+}
+
 const userService = {
     createUser,
     getUserByEmail,
+    getUserById,
 }
 export default userService
