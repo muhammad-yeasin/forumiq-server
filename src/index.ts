@@ -31,6 +31,18 @@ io.on('connection', socket => {
         console.log(`Socket ${socket.id} left thread:${threadId}`)
     })
 
+    // Join user notification room
+    socket.on('join-user', (userId: string) => {
+        socket.join(`user:${userId}`)
+        console.log(`Socket ${socket.id} joined user:${userId}`)
+    })
+
+    // Leave user notification room
+    socket.on('leave-user', (userId: string) => {
+        socket.leave(`user:${userId}`)
+        console.log(`Socket ${socket.id} left user:${userId}`)
+    })
+
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`)
     })

@@ -1,6 +1,8 @@
 import { Post } from './posts.model'
 import { IPost, IPostWithChildren } from './posts.interface'
 import { Types } from 'mongoose'
+import notificationService from '../notifications/notifications.service'
+import threadService from '../threads/threads.service'
 
 const createPost = (data: IPost) => {
     return Post.create(data)
@@ -8,6 +10,7 @@ const createPost = (data: IPost) => {
 
 const getPostsByThread = async (threadId: string) => {
     const docs = await Post.find({ thread: new Types.ObjectId(threadId) })
+        .populate('user', 'username avatar')
         .sort({ createdAt: 1 })
         .lean()
 
@@ -47,9 +50,18 @@ const getPostsByThread = async (threadId: string) => {
     return roots
 }
 
+const getPostOwnerId = async (postId: string) => {
+    const post = await Post.findById(postId).select('user').lean()
+    return post ? post.user.toString() : null
+}
+
 const postService = {
     createPost,
     getPostsByThread,
+    createNotification: notificationService.createNotification,
+    getThreadById: threadService.getThreadById,
+    getPostOwnerId,
+    getThreadOwnerId: threadService.getThreadOwnerId,
 }
 
 export default postService

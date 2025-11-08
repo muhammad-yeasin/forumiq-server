@@ -17,11 +17,17 @@ const getCountThreads = (query?: { [key: string]: any }) => {
     return Thread.countDocuments(query)
 }
 
+const getThreadOwnerId = async (threadId: string) => {
+    const thread = await Thread.findById(threadId).select('user').lean()
+    return thread ? thread.user.toString() : null
+}
+
 const threadService = {
     createThread,
     getThreadById,
     getThreads,
     getCountThreads,
+    getThreadOwnerId,
 }
 
 export default threadService
