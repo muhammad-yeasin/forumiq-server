@@ -16,9 +16,18 @@ const getUserById = (id: string) => {
     return User.findById(id)
 }
 
+const updateUserById = (id: string, data: Partial<IUser>) => {
+    // Only update provided fields; run validators and return the updated document
+    return User.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true,
+    })
+}
+
 const userService = {
     createUser,
     getUserByEmail,
     getUserById,
+    updateUserById,
 }
 export default userService
