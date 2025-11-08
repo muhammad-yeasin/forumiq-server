@@ -2,6 +2,7 @@ import { catchAsync } from '@/middlewares'
 import { RequestHandler } from 'express'
 import postService from './posts.service'
 import AppError from '@/utils/AppError'
+import { socketService } from '@/utils/socket'
 
 export const createPost: RequestHandler = catchAsync(async (req, res, next) => {
     const { thread, parent, content } = req.body
@@ -19,6 +20,9 @@ export const createPost: RequestHandler = catchAsync(async (req, res, next) => {
             new AppError('Failed to create post, Please try again', 400)
         )
     }
+
+    // Emit the new post via Socket.IO to all clients in the thread room
+    socketService.emitNewPost(thread, post as any)
 
     res.status(201).json({
         status: 'success',
