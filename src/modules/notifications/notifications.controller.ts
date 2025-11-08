@@ -23,10 +23,6 @@ export const getNotificationsByUser: RequestHandler = catchAsync(
             .filter(extraQuery)
             .sort()
             .limitFields()
-            .populate([
-                { path: 'thread', select: 'title' },
-                { path: 'post', select: 'content' },
-            ])
             .paginate()
 
         const notifications = await features.query
