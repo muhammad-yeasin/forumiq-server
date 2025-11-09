@@ -24,6 +24,17 @@ const postSchema = new Schema<IPost, PostModel>(
             type: String,
             required: [true, 'Content is required'],
         },
+        moderation: {
+            isSpam: {
+                type: Boolean,
+                default: false,
+            },
+            isInappropriate: {
+                type: Boolean,
+                default: false,
+            },
+            reasons: { type: String, default: '' },
+        },
     },
     {
         timestamps: true,

@@ -9,4 +9,6 @@ export const env = {
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
     ACCESS_TOKEN_EXPIRES_IN: process.env
         .ACCESS_TOKEN_EXPIRES_IN as jwt.SignOptions['expiresIn'],
+    GENAI_API_KEY: process.env.GENAI_API_KEY!,
+    GENAI_MODEL: process.env.GENAI_MODEL!,
 }

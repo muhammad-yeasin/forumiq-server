@@ -9,7 +9,12 @@ export const emitNewNotification = (userId: string, notification: any) => {
     io.to(`user:${userId}`).emit('new-notification', notification)
 }
 
+export const emitUpdatedPost = (threadId: string, post: IPostWithChildren) => {
+    io.to(`thread:${threadId}`).emit('update-post', post)
+}
+
 export const socketService = {
     emitNewPost,
     emitNewNotification,
+    emitUpdatedPost,
 }

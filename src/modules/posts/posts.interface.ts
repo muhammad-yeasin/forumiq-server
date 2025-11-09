@@ -5,6 +5,11 @@ export interface IPost {
     thread: Types.ObjectId
     parent?: Types.ObjectId | null
     content: string
+    moderation?: {
+        isSpam: boolean
+        isInappropriate: boolean
+        reasons: string
+    }
     createdAt?: Date
     updatedAt?: Date
 }
