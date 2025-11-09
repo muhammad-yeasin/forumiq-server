@@ -52,7 +52,7 @@ const main = async () => {
     try {
         await connectDB()
         server.listen(env.PORT, '0.0.0.0', () => {
-            console.log(`server listening on ${env.PORT}`)
+            console.log(`server listening on port ${env.PORT}`)
         })
     } catch (err) {
         console.log(`server connection failed ☹️`)
