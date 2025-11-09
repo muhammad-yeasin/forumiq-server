@@ -51,7 +51,7 @@ io.on('connection', socket => {
 const main = async () => {
     try {
         await connectDB()
-        server.listen(env.PORT, () => {
+        server.listen(env.PORT, '0.0.0.0', () => {
             console.log(`server listening on ${env.PORT}`)
         })
     } catch (err) {
